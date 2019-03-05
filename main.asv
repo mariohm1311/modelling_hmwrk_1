@@ -1,13 +1,13 @@
 clear
 addpath('iterative', 'direct_solve', 'gradient_descent', 'tridiag');
-problem = load('heatI.mat', 'A', 'b');
+problem = load('heatII.mat', 'A', 'b');
 %problemII = load('heatII.mat', 'A', 'b');
 A = problem.A; b = problem.b;
 %AII = problemII.A; bII = problemII.b;
 n = length(b);
-parameters.tol = 1e-7;
+parameters.tol = 1e-1;
 parameters.maxiter = 10000000;
-parameters.print = 1;
+parameters.print = 0;
 
 %1
 %spy(AI);
@@ -39,30 +39,28 @@ iter = zeros(5, 1);
 toc
 
 % tic
-% x4 = zeros(n, 1);
-% [x4, iter(4)] = iterate('gaussseidel', A, b, x4, parameters);
+% x3 = zeros(n, 1);
+% iter = zeros(5, 1);
+% [x3, iter(3)] = iterate('jacobi', A, b, x3, parameters);
 % toc
 
-% tic
-% x4 = zeros(n, 1);
-% [x4, iter(4)] = trid_iterate('gaussseidel', A, b, x4, parameters);
-% toc
+tic
+x4 = zeros(n, 1);
+[x4, iter(4)] = iterate('gaussseidel', A, b, x4, parameters);
+toc
+
+tic
+x4 = sparse(n, 1);
+[x4, iter(4)] = trid_iterate('gaussseidel', A, b, x4, parameters);
+toc
 
 %4
 % tic
 % x5 = zeros(n, 1);
-% % parameters.omega = optimize_omega(A);
-% parameters.omega = 1.94;
-% [x5, iter(5)] = iterate('sor', A, b,x5, parameters);
+% [parameters.omega, p, fcvector, fdvector] = optimize_omega(10, A, b, parameters);
+% plot(1:length(fcvector), fcvector, 1:length(fdvector), fdvector);
+% % [x5, iter(5)] = iterate('sor', A, b,x5, parameters);
 % toc
-% 
-% tic
-% x5 = zeros(n, 1);
-% % parameters.omega = optimize_omega(A);
-% parameters.omega = 1.94;
-% [x5, iter(5)] = trid_iterate('sor', A, b,x5, parameters);
-% toc
-
 % %5
 % tic
 % x6 = zeros(n, 1);

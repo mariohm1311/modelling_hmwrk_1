@@ -42,7 +42,8 @@
 %     fdvector(i) = fd;
 % end
 % omega = (a + b)/2;
-function [omega] = optimize_omega(iters_in_SOR, A, b, parameters)
+function [omega] = optimize_omega(A)
+    options = optimset('TolX',1e-2);
     objfun = @(omega)(obj_fun(omega, A));
-    omega = fminsearch(objfun, 1.5);
+    omega = fminsearch(objfun, 1.5, options);
 end
