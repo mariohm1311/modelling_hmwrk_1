@@ -1,4 +1,4 @@
-function x = descent(A,b,x,parameters)
+function x = cg_jacobi_preconditioner(A,b,x,parameters)
     %
     % Input --> A is the matrix of the linear system
     %       --> b is the right hand side vector of the linear system
@@ -11,7 +11,11 @@ function x = descent(A,b,x,parameters)
 
     % Size of problem
     n = size(A,1);
-
+    
+    
+    Dinv = spdiags(1./spdiags(A,0));
+    A = Dinv*A;
+    b = Dinv*b;
     % Prepare plot if n == 2
     if parameters.print   
         if n == 2
@@ -36,17 +40,24 @@ function x = descent(A,b,x,parameters)
 
     % Compute b norm bn
     bn = norm(b);
-    %% Initialize r for first iteration
+
+    %% Initialize beta, v, r for first iteration
     r = b - A*x;
+    v = r;
+    beta = 0;
 
     %% Main iteration loop
-    for k = 1:parameters.maxiter
-       % Update the value of alpha
-       alpha = dot(r, r)/dot(r,(A*r));
+    for k = 1:n
+       % Update the vector v
+       v = r + beta * v;
+       % Compute the alpha value
+       alpha = dot(v,r)/(v'*(A*v));
        % Update the solution vector x
-       x = x + alpha*r;
+       x = x + alpha * v;
        % Update the residual vector r
        r = b - A*x;
+       % Update the beta value for next iteration
+       beta = -dot(r,A*v)/(v'*(A*v));
        % Compute the residual norm rn
        rn = norm(r);
        % Print messages
@@ -57,16 +68,14 @@ function x = descent(A,b,x,parameters)
                % Concatenate the new point to the line object
                lh.XData = [lh.XData,x(1)];
                lh.YData = [lh.YData,x(2)];
-           end   
+           end
        end
        % Check the exit condition based on new residual
-       if rn < parameters.tol*bn
+       if rn < bn*parameters.tol
            return % This will stop the execution of this function and return immediately to the main program
        end
     end
-    
+
     %% Raise error if maximum number of iterations reached
     error('Max iter reached');
 end
-
-    

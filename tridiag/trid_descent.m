@@ -1,4 +1,4 @@
-function x = descent(A,b,x,parameters)
+function x = trid_descent(A,b,x,parameters)
     %
     % Input --> A is the matrix of the linear system
     %       --> b is the right hand side vector of the linear system
@@ -12,30 +12,9 @@ function x = descent(A,b,x,parameters)
     % Size of problem
     n = size(A,1);
 
-    % Prepare plot if n == 2
-    if parameters.print   
-        if n == 2
-            % create new figure
-            figure; 
-            % prepare grid to plot contour
-            [X,Y] = meshgrid(linspace(-2,12,200),linspace(-7,7,200)); 
-            % compute the phi function at the grid points
-            PHI = zeros(200,200); 
-            for i = 1:200
-                for j = 1:200
-                    u = [X(i,j);Y(i,j)]; 
-                    PHI(i,j) = 0.5*u'*A*u - b'*u;
-                end
-            end
-            % Do the contour plot
-            contour(X,Y,PHI,50)
-            % Intialize the line object, with the data of the inital guess
-            lh = line('XData',x(1),'YData',x(2),'Marker','x','Color','k');
-        end
-    end
-
     % Compute b norm bn
     bn = norm(b);
+    
     %% Initialize r for first iteration
     r = b - A*x;
 
@@ -52,12 +31,6 @@ function x = descent(A,b,x,parameters)
        % Print messages
        if parameters.print
            fprintf('Iteration: %u, |r|/|b|: %g\n',k,rn/bn)
-           % Update plot if n == 2
-           if n == 2
-               % Concatenate the new point to the line object
-               lh.XData = [lh.XData,x(1)];
-               lh.YData = [lh.YData,x(2)];
-           end   
        end
        % Check the exit condition based on new residual
        if rn < parameters.tol*bn

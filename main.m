@@ -1,5 +1,5 @@
 clear
-addpath('Iterative', 'Direct_solve', 'gradient_descent');
+addpath('iterative', 'direct_solve', 'gradient_descent', 'tridiag');
 problem = load('heatII.mat', 'A', 'b');
 %problemII = load('heatII.mat', 'A', 'b');
 A = problem.A; b = problem.b;
@@ -17,10 +17,10 @@ bandI = bandwidth(A);
 % b = diag(1./diag(A))*b;
 
 %2
-tic
-LU= LUfactor(A);
-x1 = LUsolve(LU, b);
-toc
+% tic
+% LU= LUfactor(A);
+% x1 = LUsolve(LU, b);
+% toc
 
 % tic
 % x2 = A\b;
@@ -55,8 +55,12 @@ toc
 % x7 = cg(A, b, x7, parameters);
 % toc
 
-% tic
-% x8 = zeros(n, 1);
-% x8 = cg_jacobi_preconditioner(A, b, x8, parameters);
-% toc
+tic
+x8 = zeros(n, 1);
+x8 = trid_cg(A, b, x8, parameters);
+toc
 
+tic
+x8 = zeros(n, 1);
+x8 = trid_cg_jacobi_preconditioner(A, b, x8, parameters);
+toc

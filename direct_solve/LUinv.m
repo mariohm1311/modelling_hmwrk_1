@@ -1,5 +1,5 @@
 function inv = LUinv(LU, p)
-    n = length(LU, 1);
+    n = length(LU);
     inv = zeros(n, n);
     I = eye(n);
     
