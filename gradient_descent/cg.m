@@ -1,4 +1,4 @@
-function x = cg(A,b,x,parameters)
+function [x,k,p] = cg(A,b,x,parameters)
     %
     % Input --> A is the matrix of the linear system
     %       --> b is the right hand side vector of the linear system
@@ -41,7 +41,7 @@ function x = cg(A,b,x,parameters)
     r = b - A*x;
     v = r;
     beta = 0;
-
+    counter = 0;
     %% Main iteration loop
     for k = 1:n
        % Update the vector v
@@ -66,8 +66,16 @@ function x = cg(A,b,x,parameters)
                lh.YData = [lh.YData,x(2)];
            end
        end
+       
+       if mod(k, parameters.step_iter) == 0
+            counter = counter + 1;
+            p(counter) = rn/bn;
+       end
+       
        % Check the exit condition based on new residual
        if rn < bn*parameters.tol
+           counter = counter + 1;
+           p(counter) = rn/bn;
            return % This will stop the execution of this function and return immediately to the main program
        end
     end

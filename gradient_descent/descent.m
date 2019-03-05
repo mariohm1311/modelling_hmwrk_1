@@ -1,4 +1,4 @@
-function x = descent(A,b,x,parameters)
+function [x,k,p] = descent(A,b,x,parameters)
     %
     % Input --> A is the matrix of the linear system
     %       --> b is the right hand side vector of the linear system
@@ -38,7 +38,7 @@ function x = descent(A,b,x,parameters)
     bn = norm(b);
     %% Initialize r for first iteration
     r = b - A*x;
-
+    counter = 0;
     %% Main iteration loop
     for k = 1:parameters.maxiter
        % Update the value of alpha
@@ -59,8 +59,20 @@ function x = descent(A,b,x,parameters)
                lh.YData = [lh.YData,x(2)];
            end   
        end
+       
+       if mod(k, parameters.step_iter) == 0
+            counter = counter + 1;
+            p(counter) = rn/bn;
+       end
+       
+       if mod(k, parameters.step_iter) == 0
+            counter = counter + 1;
+            p(counter) = rn/bn;
+        end
        % Check the exit condition based on new residual
        if rn < parameters.tol*bn
+            counter = counter + 1;
+            p(counter) = rn/bn;
            return % This will stop the execution of this function and return immediately to the main program
        end
     end

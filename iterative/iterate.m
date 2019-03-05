@@ -1,4 +1,4 @@
-function [x,k] = iterate(method,A,b,x,parameters)
+function [x,k,p] = iterate(method,A,b,x,parameters)
 
 %% Process method selection
 switch method
@@ -14,7 +14,7 @@ end
 
 %% Compute b norm
 bn = norm(b);
-
+counter = 0;
 %% Main iteration loop
 for k = 1:parameters.maxiter
     
@@ -31,13 +31,18 @@ for k = 1:parameters.maxiter
         fprintf('Iteration: %u, |r|/|b|: %g\n',k,rn/bn)
     end
     
+    if mod(k, parameters.step_iter) == 0
+        counter = counter + 1;
+        p(counter) = rn/bn;
+    end
+    
     % Exit condition
     if rn <= parameters.tol * bn
+        counter = counter + 1;
+        p(counter) = rn/bn;
         return
     end   
 end
-%     error('Reached max itterations');
-error('Maxiter reached'); %NOT RAISING AN ERROR IN ORDER TO COMPUTE ONLY
-% SOME ITERATIONS FOR OMEGA IN SOR
+error('Maxiter reached');
 end
 
