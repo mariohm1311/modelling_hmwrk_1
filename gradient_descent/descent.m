@@ -63,11 +63,6 @@ function [x,k,p] = descent(A,b,x,parameters)
        if mod(k, parameters.step_iter) == 0
             counter = counter + 1;
             p(counter) = rn/bn;
-       end
-       
-       if mod(k, parameters.step_iter) == 0
-            counter = counter + 1;
-            p(counter) = rn/bn;
         end
        % Check the exit condition based on new residual
        if rn < parameters.tol*bn
