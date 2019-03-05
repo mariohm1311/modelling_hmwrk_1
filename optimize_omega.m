@@ -1,3 +1,7 @@
+%That is the try of Golden Section Research. We finally use the computation
+%the computation of the spectral radious of MATLAB instead of searching
+%by hand. There you have the function we are using to get the value.
+
 % function [omega, values, fcvector, fdvector] = optimize_omega(iters_in_SOR, A, b, parameters)
 % parameters.maxiter = iters_in_SOR;
 % n = length(b);
