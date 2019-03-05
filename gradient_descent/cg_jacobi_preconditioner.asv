@@ -1,4 +1,4 @@
-function x = cg(A,b,x,parameters)
+function x = cg_jacobi_preconditioner(A,b,x,parameters)
 %
 % Input --> A is the matrix of the linear system
 %       --> b is the right hand side vector of the linear system
@@ -11,7 +11,9 @@ function x = cg(A,b,x,parameters)
 
 % Size of problem
 n = size(A,1);
-
+Dinv = diag(1./diag(A));
+Ap = Dinv*A;
+bp = Dinv*b;
 % Prepare plot if n == 2
 if parameters.print   
     if n == 2
@@ -24,7 +26,7 @@ if parameters.print
         for i = 1:200
             for j = 1:200
                 u = [X(i,j);Y(i,j)]; 
-                PHI(i,j) = 0.5*u'*A*u - b'*u;
+                PHI(i,j) = 0.5*u'*Ap*u - bp'*u;
             end
         end
         % Do the contour plot
@@ -38,7 +40,7 @@ end
 bn = norm(b);
 
 %% Initialize beta, v, r for first iteration
-r = b - A*x;
+r = b;
 v = r;
 beta = 0;
 
@@ -75,5 +77,3 @@ end
 %% Raise error if maximum number of iterations reached
 error('Max iter reached');
 end
-
-

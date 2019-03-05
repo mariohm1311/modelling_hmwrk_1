@@ -4,8 +4,8 @@ function [x,k] = iterate(method,A,b,x,parameters)
 switch method
     case 'jacobi'
         step = @(A,b,x)jacobi(A,b,x);
-    case 'gausseidel'
-        step = @(A,b,x)gausseidel(A,b,x);        
+    case 'gaussseidel'
+        step = @(A,b,x)gaussseidel(A,b,x);        
     case 'sor'
         step = @(A,b,x)sor(A,b,x,parameters.omega);
     otherwise

@@ -5,7 +5,7 @@ problem = load('heatII.mat', 'A', 'b');
 A = problem.A; b = problem.b;
 %AII = problemII.A; bII = problemII.b;
 n = length(b);
-parameters.tol = 1e-8;
+parameters.tol = 1e-9;
 parameters.maxiter = 10000000;
 parameters.print = 1;
 
@@ -27,11 +27,11 @@ x2 = A\b;
 toc
 
 %3
-tic
-x3 = zeros(n, 1);
-iter = zeros(5, 1);
-[x3, iter(3)] = iterate('jacobi', A, b, x3, parameters);
-toc
+% tic
+% x3 = zeros(n, 1);
+% iter = zeros(5, 1);
+% [x3, iter(3)] = iterate('jacobi', A, b, x3, parameters);
+% toc
 
 % tic
 % x4 = zeros(n, 1);
@@ -49,14 +49,18 @@ toc
 % x6 = zeros(n, 1);
 % x6 = descent(A, b, x6, parameters);
 % toc
-% 
+%
 % tic
 % x7 = zeros(n, 1);
 % x7 = cg(A, b, x7, parameters);
 % toc
-% 
-% tic
-% x8 = zeros(n, 1);
-% x8 = cg_jacobi_preconditioner(A, b, x8, parameters);
-% toc
 
+tic
+x8 = zeros(n, 1);
+x8 = cg_jacobi_preconditioner(A, b, x8, parameters);
+toc
+
+% tic
+% x9 = zeros(n, 1);
+% x9 = cg_cholesky_preconditioner(A, b, x9, parameters);
+% toc

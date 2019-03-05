@@ -1,4 +1,4 @@
-function x = gausseidel(A,b,x)
+function x = gaussseidel(A,b,x)
 x = fsub(tril(A),b - (triu(A) - diag(diag(A)))*x);
 % n = length(b);
 % for i = 1:n

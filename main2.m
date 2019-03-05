@@ -1,5 +1,5 @@
 clear
-addpath('Itterative', 'Direct_solve');
+addpath('iterative', 'direct_solve');
 problem = load('heatI.mat', 'A', 'b');
 %problemII = load('heatII.mat', 'A', 'b');
 A = problem.A; b = problem.b;
@@ -34,7 +34,7 @@ parameters.print = 0;
 % 
 % tic
 % x4 = zeros(n);
-% x4 = iterate('gausseidel', A, b, x4, parameters);
+% x4 = iterate('gaussseidel', A, b, x4, parameters);
 % toc
 domega = (1.9:0.001:2);
 itter = zeros(size(domega));

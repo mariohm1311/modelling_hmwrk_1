@@ -75,5 +75,5 @@ for k = 1:n
 end
 
 %% Raise error if maximum number of iterations reached
-error('Max itter reached');
+error('Max iter reached');
 end
