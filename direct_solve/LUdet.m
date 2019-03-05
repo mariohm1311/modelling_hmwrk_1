@@ -1,3 +1,3 @@
 function det = LUdet(LU)
-det = prod(diag(LU));
+    det = prod(diag(LU));
 end
