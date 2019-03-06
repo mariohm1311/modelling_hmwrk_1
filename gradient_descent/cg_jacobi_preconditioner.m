@@ -1,4 +1,4 @@
-function [x,k,p] = cg_jacobi_preconditioner(A,b,x,parameters)
+function [x,k,iter_arr,p] = cg_jacobi_preconditioner(A,b,x,parameters)
     %
     % Input --> A is the matrix of the linear system
     %       --> b is the right hand side vector of the linear system
@@ -43,6 +43,8 @@ function [x,k,p] = cg_jacobi_preconditioner(A,b,x,parameters)
     r = b - A*x;
     v = r;
     beta = 0;
+    
+    iter_arr = [];
     counter = 0;
     %% Main iteration loop
     for k = 1:n
@@ -69,14 +71,16 @@ function [x,k,p] = cg_jacobi_preconditioner(A,b,x,parameters)
            end
        end
        
-        if mod(k, parameters.step_iter) == 0
+       if mod(k, parameters.step_iter) == 0
             counter = counter + 1;
+            iter_arr(counter) = k;
             p(counter) = rn/bn;
-        end
+       end
        
        % Check the exit condition based on new residual
        if rn < bn*parameters.tol
            counter = counter + 1;
+           iter_arr(counter) = k;
            p(counter) = rn/bn;
            return % This will stop the execution of this function and return immediately to the main program
        end

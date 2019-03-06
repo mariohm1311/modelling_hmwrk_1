@@ -1,4 +1,4 @@
-function [x,k,p] = iterate(method,A,b,x,parameters)
+function [x,k,iter_arr,p] = iterate(method,A,b,x,parameters)
 
 %% Process method selection
 switch method
@@ -15,6 +15,7 @@ end
 %% Compute b norm
 bn = norm(b);
 counter = 0;
+iter_arr = [];
 %% Main iteration loop
 for k = 1:parameters.maxiter
     
@@ -33,15 +34,17 @@ for k = 1:parameters.maxiter
     
     if mod(k, parameters.step_iter) == 0
         counter = counter + 1;
+        iter_arr(counter) = k;
         p(counter) = rn/bn;
     end
-    
-    % Exit condition
-    if rn <= parameters.tol * bn
-        counter = counter + 1;
-        p(counter) = rn/bn;
-        return
-    end   
+
+    % Check the exit condition based on new residual
+    if rn < bn*parameters.tol
+       counter = counter + 1;
+       iter_arr(counter) = k;
+       p(counter) = rn/bn;
+       return % This will stop the execution of this function and return immediately to the main program
+    end
 end
 error('Maxiter reached');
 end
